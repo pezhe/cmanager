@@ -11,16 +11,25 @@ public class Request {
     private final String id;
     private String requestorId;
     private String apartmentId;
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
     private PublicService service;
     private RequestType type;
     private String description;
     private String resolution;
     private RequestStatus status;
-    private final List<RequestOption> options = new ArrayList<>();
+    private final List<RequestOption> options;
 
-    public Request(String id) {
+    private Request(String id, String requestorId, String apartmentId, LocalDateTime createdAt, PublicService service,
+                   RequestType type, String description, RequestStatus status, List<RequestOption> options) {
         this.id = id;
+        this.requestorId = requestorId;
+        this.apartmentId = apartmentId;
+        this.createdAt = createdAt;
+        this.service = service;
+        this.type = type;
+        this.description = description;
+        this.status = status;
+        this.options = options;
     }
 
     public String getId() {
@@ -45,10 +54,6 @@ public class Request {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public PublicService getService() {
@@ -114,4 +119,63 @@ public class Request {
                 ", options=" + options +
                 '}';
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private String id;
+        private String requestorId;
+        private String apartmentId;
+        private PublicService service;
+        private RequestType type;
+        private String description;
+        private final List<RequestOption> options = new ArrayList<>();
+
+        private Builder() {}
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder requestorId(String requestorId) {
+            this.requestorId = requestorId;
+            return this;
+        }
+
+        public Builder apartmentId(String apartmentId) {
+            this.apartmentId = apartmentId;
+            return this;
+        }
+
+        public Builder service(PublicService service) {
+            this.service = service;
+            return this;
+        }
+
+        public Builder type(RequestType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder option(RequestOption option) {
+            this.options.add(option);
+            return this;
+        }
+
+        public Request build() {
+            return new Request(id, requestorId, apartmentId, LocalDateTime.now(), service, type, description,
+                    RequestStatus.OPEN, options);
+        }
+
+    }
+
 }

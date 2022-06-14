@@ -30,8 +30,9 @@ public class RequestOption {
         return values;
     }
 
-    public void addValue(String value) {
+    public RequestOption addValue(String value) {
         this.values.add(value);
+        return this;
     }
 
     @Override
