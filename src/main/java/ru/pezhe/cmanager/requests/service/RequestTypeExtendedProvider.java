@@ -2,7 +2,6 @@ package ru.pezhe.cmanager.requests.service;
 
 import ru.pezhe.cmanager.requests.entity.RequestType;
 import ru.pezhe.cmanager.requests.service.common.ComplexProvider;
-import ru.pezhe.cmanager.requests.service.common.SimpleProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class RequestTypeExtendedProvider extends ComplexProvider {
 
-    public RequestTypeExtendedProvider(SimpleProvider simpleProvider) {
-        super(simpleProvider);
+    public RequestTypeExtendedProvider(RequestTypeProvider provider) {
+        super(provider);
     }
 
     @Override
