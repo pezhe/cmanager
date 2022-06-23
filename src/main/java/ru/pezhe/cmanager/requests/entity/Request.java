@@ -1,6 +1,7 @@
 package ru.pezhe.cmanager.requests.entity;
 
 import ru.pezhe.cmanager.requests.entity.enums.RequestStatus;
+import ru.pezhe.cmanager.requests.service.common.Listener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,8 +20,10 @@ public class Request {
     private RequestStatus status;
     private final List<RequestOption> options;
 
+    private final List<Listener> listeners;
+
     private Request(String id, String requestorId, String apartmentId, LocalDateTime createdAt, PublicService service,
-                   RequestType type, String description, RequestStatus status, List<RequestOption> options) {
+                   RequestType type, String description, RequestStatus status, List<RequestOption> options, List<Listener> listeners) {
         this.id = id;
         this.requestorId = requestorId;
         this.apartmentId = apartmentId;
@@ -28,8 +31,9 @@ public class Request {
         this.service = service;
         this.type = type;
         this.description = description;
-        this.status = status;
         this.options = options;
+        this.listeners = listeners;
+        setStatus(status);
     }
 
     public String getId() {
@@ -94,6 +98,7 @@ public class Request {
 
     public void setStatus(RequestStatus status) {
         this.status = status;
+        notifyListeners();
     }
 
     public List<RequestOption> getOptions() {
@@ -102,6 +107,12 @@ public class Request {
 
     public boolean addOption(RequestOption option) {
         return this.options.add(option);
+    }
+
+    private void notifyListeners(){
+        for (Listener listener : listeners) {
+            listener.update(this);
+        }
     }
 
     @Override
@@ -133,6 +144,7 @@ public class Request {
         private RequestType type;
         private String description;
         private final List<RequestOption> options = new ArrayList<>();
+        private final List<Listener> listeners = new ArrayList<>();
 
         private Builder() {}
 
@@ -171,9 +183,14 @@ public class Request {
             return this;
         }
 
+        public Builder listener(Listener listener) {
+            this.listeners.add(listener);
+            return this;
+        }
+
         public Request build() {
             return new Request(id, requestorId, apartmentId, LocalDateTime.now(), service, type, description,
-                    RequestStatus.OPEN, options);
+                    RequestStatus.OPEN, options, listeners);
         }
 
     }

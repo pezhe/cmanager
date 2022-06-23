@@ -2,10 +2,7 @@ package ru.pezhe.cmanager.requests;
 
 import ru.pezhe.cmanager.requests.entity.Request;
 import ru.pezhe.cmanager.requests.entity.RequestOption;
-import ru.pezhe.cmanager.requests.service.IdProvider;
-import ru.pezhe.cmanager.requests.service.PublicServiceProvider;
-import ru.pezhe.cmanager.requests.service.RequestTypeExtendedProvider;
-import ru.pezhe.cmanager.requests.service.RequestTypeProvider;
+import ru.pezhe.cmanager.requests.service.*;
 
 public class CmanagerApp {
 
@@ -22,6 +19,7 @@ public class CmanagerApp {
                 .type(typeProvider.getByName("stub_type_1"))
                 .description("Problem description")
                 .option(new RequestOption(IdProvider.getNewId(), "option_1").addValue("some_value"))
+                .listener(new DefaultRequestListener())
                 .build();
 
         System.out.println(createdRequest);
